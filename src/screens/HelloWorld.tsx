@@ -11,6 +11,7 @@ import Animated, {
   withTiming,
   withDelay,
   Easing,
+  withSequence,
 } from 'react-native-reanimated';
 
 const HelloWorldApp = () => {
@@ -27,8 +28,8 @@ const HelloWorldApp = () => {
     ],
   }));
 
-  const [hasGrownWhiteContainer, setHasGrownWhiteContainer] =
-    React.useState<boolean>(false);
+  // const [hasGrownWhiteContainer, setHasGrownWhiteContainer] =
+  //   React.useState<boolean>(false);
 
   React.useEffect(() => {
     whiteContainerScale.value = withSpring(
@@ -38,7 +39,7 @@ const HelloWorldApp = () => {
         stiffness: 50,
         mass: 1.2,
       },
-      () => runOnJS(setHasGrownWhiteContainer)(true),
+      // () => runOnJS(setHasGrownWhiteContainer)(true),
     );
   }, []);
 
@@ -53,15 +54,18 @@ const HelloWorldApp = () => {
     transform: [{scale: hTextScale.value}],
   }));
 
-  if (hasGrownWhiteContainer) {
-    middlePinkCircleScale.value = withDelay(
-      1000,
-      withTiming(180, {
+  // if (hasGrownWhiteContainer) {
+  middlePinkCircleScale.value = withDelay(
+    2500,
+    withSequence(
+      withTiming(45),
+      withTiming(150, {
         duration: 2000,
         easing: Easing.bezier(0.25, 0.1, 0.25, 1),
       }),
-    );
-  }
+    ),
+  );
+  // }
 
   return (
     <PageContainer>
@@ -72,11 +76,7 @@ const HelloWorldApp = () => {
 
         <View style={[styles.whiteContainer, styles.lilDotsContainer]}>
           {Array.from({length: 6}).map((_, index) => (
-            <AnimatedPinkDots
-              index={index}
-              key={index}
-              shouldAnimate={hasGrownWhiteContainer}
-            />
+            <AnimatedPinkDots index={index} key={index} />
           ))}
 
           <Animated.View style={[styles.lilPink, middlePinkCircleStyles]} />
@@ -89,11 +89,11 @@ const HelloWorldApp = () => {
 
 const AnimatedPinkDots: React.FC<{
   index: number;
-  shouldAnimate: boolean;
-}> = ({index, shouldAnimate}) => {
+  // shouldAnimate: boolean;
+}> = ({index}) => {
   const radius = useSharedValue(110);
 
-  const deg = index * 60;
+  const deg = (index + 1) * 60;
   const angle = useSharedValue(deg);
 
   const x = useDerivedValue(() =>
@@ -115,28 +115,30 @@ const AnimatedPinkDots: React.FC<{
     5: 6,
   };
 
-  if (shouldAnimate) {
-    pinkDotScale.value = withDelay(
-      indexToPosition[index] * 200,
-      withTiming(45, {
-        duration: 500,
-        easing: Easing.bezier(0.25, 0.1, 0.25, 1),
-      }),
-    );
+  // if (shouldAnimate) {
+  pinkDotScale.value = withDelay(
+    indexToPosition[index] * 200 + 500,
+    withTiming(45, {
+      duration: 500,
+      easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+    }),
+  );
 
-    angle.value = withTiming(deg + 300, {
-      duration: 3000,
+  angle.value = withDelay(
+    500,
+    withTiming(deg + 300, {
+      duration: 2400,
       easing: Easing.cubic,
-    });
+    }),
+  );
 
-    radius.value = withDelay(
-      indexToPosition[index] * 200 + 1200,
-      withTiming(0, {
-        easing: Easing.bezier(0.25, 0.1, 0.25, 1),
-        duration: 1000,
-      }),
-    );
-  }
+  radius.value = withDelay(
+    indexToPosition[index] * 150 + 2000,
+    withTiming(0, {
+      easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+      duration: 800,
+    }),
+  );
 
   const animatedDotStyle = useAnimatedStyle(() => ({
     transform: [

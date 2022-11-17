@@ -10,7 +10,7 @@ const StackNavigator = createStackNavigator<RootStackParamList>();
 const Navigation = () => {
   return (
     <NavigationContainer>
-      <StackNavigator.Navigator initialRouteName="Home">
+      <StackNavigator.Navigator initialRouteName="HelloWorld">
         {/* // screenOptions={{headerShown: false}}> */}
         <StackNavigator.Screen name="Home" component={HomeScreen} />
         <StackNavigator.Screen name="HelloWorld" component={HelloWorld} />

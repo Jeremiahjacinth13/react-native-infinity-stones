@@ -1,3 +1,1 @@
-import { createTheme } from '@shopify/restyle';
-
-const theme = createTheme();
+export const dummy = 'dummy';
