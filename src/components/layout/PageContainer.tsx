@@ -1,12 +1,12 @@
 import * as React from 'react';
-import {StyleSheet, SafeAreaView, StatusBar} from 'react-native';
+import {StyleSheet, View, StatusBar} from 'react-native';
 
 const PageContainer: React.FC<React.PropsWithChildren<{}>> = ({children}) => {
   return (
-    <SafeAreaView style={styles.pageContainer}>
-      <StatusBar barStyle={'dark-content'} />
+    <View style={styles.pageContainer}>
+      <StatusBar barStyle={'light-content'} />
       {children}
-    </SafeAreaView>
+    </View>
   );
 };
 
